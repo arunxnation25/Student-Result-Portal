@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4">
+                <h3 class="text-center mb-3">Add Student</h3>
+                <!-- IMPORTANT: enctype added for file upload -->
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="text" name="roll_no" class="form-control" placeholder="Roll No" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="name" class="form-control" placeholder="Student Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="class" class="form-control" placeholder="Class" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Father's Name</label>
+                        <input type="text" name="father_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Mother's Name</label>
+                        <input type="text" name="mother_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dob" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Upload Photo (JPG/PNG)</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Student</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

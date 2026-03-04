@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Marks - {{ student['name'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h1>Edit Marks for {{ student['name'] }}</h1>
+
+<form method="POST">
+    <table border="1">
+        <tr>
+            <th>Subject</th>
+            <th>Internal</th>
+            <th>Theory</th>
+            <th>Total</th>
+            <th>Grade</th>
+        </tr>
+        {% for subject in subjects %}
+        <tr>
+            <td>{{ subject['subject_name'] }}</td>
+            <td>
+                <input type="number" name="internal_{{ subject['subject_id'] }}"
+                       value="{{ existing_marks[subject['subject_id']]['internal'] if existing_marks.get(subject['subject_id']) else 0 }}" 
+                       min="0"
+                       {% if subject['subject_id'] not in approved_subject_ids %} readonly style="background-color:#f0f0f0;" {% endif %}>
+            </td>
+            <td>
+                <input type="number" name="theory_{{ subject['subject_id'] }}"
+                       value="{{ existing_marks[subject['subject_id']]['theory'] if existing_marks.get(subject['subject_id']) else 0 }}" 
+                       min="0"
+                       {% if subject['subject_id'] not in approved_subject_ids %} readonly style="background-color:#f0f0f0;" {% endif %}>
+            </td>
+            <td>
+                {{ (existing_marks[subject['subject_id']]['internal'] + existing_marks[subject['subject_id']]['theory']) if existing_marks.get(subject['subject_id']) else 0 }}
+            </td>
+            <td>
+                {{ existing_marks[subject['subject_id']]['grade'] if existing_marks.get(subject['subject_id']) else '-' }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <input type="submit" value="Update Marks">
+</form>
+
+<a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Official Academic Transcript</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body{
+    background:#e8e8e8;
+    font-family:'Playfair Display', serif;
+}
+
+@media print {
+    .download-btn,
+    .request-btn{
+        display:none;
+    }
+}
+
+/* 🔥 COMPACT SIZE */
+.transcript-container{
+    width: 170mm;              /* reduced from 180mm */
+    margin: 40px auto;
+    padding: 10mm;             /* reduced padding */
+    background:#fffdf8;
+    border:5px double #c8a951;  /* slightly thinner border */
+    box-sizing: border-box;
+    position: relative;
+}
+
+.watermark{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:80px;      /* smaller watermark */
+    color:rgba(200,169,81,0.08);
+    font-weight:800;
+    white-space:nowrap;
+    pointer-events:none;
+}
+
+.institute-name{
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+}
+
+.degree-title{
+    text-align:center;
+    font-size:15px;
+    margin-top:5px;
+    font-style:italic;
+}
+
+.logo{
+    display:block;
+    margin:0 auto 10px auto;
+    width:70px;       /* smaller logo */
+}
+
+.student-photo{
+    position:absolute;
+    top:40px;
+    right:40px;
+    width:100px;     /* smaller photo */
+    height:120px;
+    object-fit:cover;
+    border:3px solid #c8a951;
+    padding:3px;
+    background:white;
+}
+
+.info-section{
+    margin-top:20px;
+    font-size:14px;   /* smaller text */
+}
+
+.table thead{
+    background:#16213e;
+    color:white;
+    text-align:center;
+    font-size:14px;
+}
+
+.table td{
+    text-align:center;
+    vertical-align:middle;
+    font-size:13px;
+    padding:6px;
+}
+
+.result-box{
+    margin-top:20px;
+    padding:15px;
+    border:1.5px solid #c8a951;
+    background:#fffaf0;
+    font-size:14px;
+}
+
+.signature-section{
+    margin-top:30px;
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+}
+
+.official-seal{
+    text-align:center;
+    margin-top:20px;
+    font-size:12px;
+    font-style:italic;
+}
+
+.download-btn{
+    display:block;
+    margin:20px auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="transcript-container" id="resultCard">
+
+<div class="watermark">OFFICIAL</div>
+
+<img src="{{ url_for('static', filename='mpgc_logo.png') }}" class="logo">
+
+{% if student['photo'] %}
+<img src="{{ url_for('static', filename='uploads/' + student['photo']) }}" class="student-photo">
+{% endif %}
+
+ <div class="institute-name">Maharana Pratap Govt. Degree College</div>
+
+<div class="degree-title">
+Department of Computer Applications
+</div>
+
+<hr>
+
+<div class="info-section row">
+    <div class="col-6">
+        <p><strong>Name:</strong> {{ student['name'] }}</p>
+        <p><strong>Roll No:</strong> {{ student['roll_no'] }}</p>
+        <p><strong>Class:</strong> {{ student['class'] }}</p>
+    </div>
+    <div class="col-6">
+        <p><strong>Father:</strong> {{ student['father_name'] }}</p>
+        <p><strong>Mother:</strong> {{ student['mother_name'] }}</p>
+    </div>
+</div>
+
+<hr>
+
+<table class="table table-bordered mt-3">
+<thead>
+<tr>
+<th>Subject</th>
+<th>CR</th>
+<th>CCA</th>
+<th>ESE</th>
+<th>Total</th>
+<th>Grade</th>
+<th class="request-btn">Action</th>
+</tr>
+</thead>
+<tbody>
+
+{% for m in marks %}
+<tr>
+<td>{{ m['subject_name'] }}</td>
+<td>{{ m['credit'] }}</td>
+<td>{{ m['internal'] }}</td>
+<td>{{ m['theory'] }}</td>
+<td>{{ m['total'] }}</td>
+<td>{{ m['grade'] }}</td>
+
+<td class="request-btn">
+<a href="/student/request/{{ m['subject_id'] }}/Reevaluation"
+class="btn btn-warning btn-sm">Re-Eval</a>
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+<div class="result-box">
+<strong>SGPA:</strong> {{ sgpa }} <br>
+<strong>Overall:</strong> {{ overall }}
+<p><strong>Overall Grade:</strong> {{ overall_grade }}</p>
+</div>
+
+<div class="official-seal">
+Official Computer Generated Transcript
+</div>
+
+<div class="signature-section">
+<div>
+__________________<br>
+Controller
+</div>
+<div>
+__________________<br>
+Principal
+</div>
+</div>
+
+</div>
+
+<button onclick="downloadPDF()" class="btn btn-success download-btn">
+Download PDF
+</button>
+<script>
+function downloadPDF(){
+
+    const element = document.getElementById("resultCard");
+
+    const opt = {
+        margin: 0,
+        filename: '{{ student["name"] }}_Result.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { 
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait'
+        }
+    };
+
+    html2pdf().set(opt).from(element).save();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ student['name'] }} Result</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h2 { margin: 0; }
+.student-info { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.student-info .details { width: 70%; }
+.student-info img { width: 120px; height: 150px; border: 1px solid #000; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 14px; }
+th { background-color: #f2f2f2; }
+.sgpa { margin-top: 20px; font-size: 16px; text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Himachal Pradesh University</h2>
+    <h3>Examination Result</h3>
+</div>
+
+<div class="student-info">
+    <div class="details">
+        <p><strong>Name:</strong> {{ student['name'] }}</p>
+        <p><strong>Roll No:</strong> {{ student['roll_no'] }}</p>
+        <p><strong>Class:</strong> {{ student['class'] }}</p>
+        <p><strong>Father:</strong> {{ student['father_name'] }}</p>
+        <p><strong>Mother:</strong> {{ student['mother_name'] }}</p>
+        <p><strong>Date of Birth:</strong> {{ student['dob'] }}</p>
+    </div>
+    <div class="photo">
+        {% if student['photo'] %}
+            <img src="{{ url_for('static', filename='uploads/' + student['photo']) }}" alt="Photo">
+        {% else %}
+            <img src="{{ url_for('static', filename='uploads/default.jpg') }}" alt="Photo">
+        {% endif %}
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Credit</th>
+            <th>Internal</th>
+            <th>Theory</th>
+            <th>Total</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in marks %}
+        <tr>
+            <td>{{ m['subject_name'] }}</td>
+            <td>{{ m['credit'] }}</td>
+            <td>{{ m['internal'] }}</td>
+            <td>{{ m['theory'] }}</td>
+            <td>{{ m['total'] }}</td>
+            <td>{{ m['grade'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="sgpa">
+    <strong>SGPA: {{ sgpa }}</strong>
+</div>
+
+</body>
+</html>
